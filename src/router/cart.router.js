@@ -2,6 +2,8 @@ import { Router } from "express";
 import cartManager from "../managers/cartManager.js";
 import { checkProductList } from "../middlewares/checkProductList.middleware.js";
 import { checkProductCart } from "../middlewares/checkProductCart.middleware.js";
+import cartDao from "../dao/cart.dao.js";
+
 
 
 const router = Router();
@@ -19,7 +21,7 @@ router.get("/carts", async (req, res)=>{
 
 router.post("/carts", async (req, res) => {
     try {
-      const cart = await cartManager.createCart();
+      const cart = await cartDao.create();
   
       res.status(201).json({ status: "ok", cart });
     } catch (error) {
@@ -33,7 +35,7 @@ router.post("/carts", async (req, res) => {
     try {
         const { cid } = req.params;  
 
-      const cart = await cartManager.getCartById(cid);
+      const cart = await cartDao.getById(cid);
       if(!cart) return res.status(404).json({status: "error", msg: "Carrito no encontrado"});
   
       res.status(201).json({ status: "ok", cart });

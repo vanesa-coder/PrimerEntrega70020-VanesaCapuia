@@ -1,6 +1,8 @@
 import { Router } from "express";
 import productManage from "../managers/productManage.js";
 import { checkProductData } from "../middlewares/checkProductData.middleware.js";
+import productDao from "../dao/product.dao.js";
+
 
 const router = Router();
 
@@ -13,7 +15,7 @@ const router = Router();
 router.get("/products", async (req, res) => {
   try {
     const limit = req.query.limit; // <-- /products ? limite = x
-    const allProducts = await productManage.getProducts();
+    const allProducts = await productDao.getAll();
     console.log(limit)
     if (!limit) {
 
@@ -34,7 +36,7 @@ router.get("/products", async (req, res) => {
 router.get("/products/:pid", async(req, res) => {
     try{
     const { pid } = req.params;
-    const product = await productManage.getProductById(pid);
+    const product = await productDao.getById(pid);
     if (!product) return res.status(404).json({ status: "error", msg: "Producto no encontrado" });
 
     res.status(200).json({ status: "ok", product });
@@ -48,7 +50,7 @@ router.get("/products/:pid", async(req, res) => {
 router.put("/products/:pid", async(req, res)=>{
     const { pid } = req.params;
     const body = req.body;
-    const product = await productManage.updateProduct(pid, body);
+    const product = await productDao.update(pid, body);
 
     res.send(product);
 });
@@ -58,7 +60,7 @@ router.post("/products", checkProductData, async (req, res) => {
     try {
       const body = req.body;
       
-      const product = await productManage.addProduct(body);
+      const product = await productDao.create(body);
   
       res.status(201).json({ status: "ok", product }); //status 201 significa que se ha creado todo bien
     } catch (error) {
@@ -71,7 +73,7 @@ router.post("/products", checkProductData, async (req, res) => {
 router.delete("/products/:pid", async (req, res) => {
   try {
     const { pid } = req.params;
-    const product = await productManage.getProductById(pid);
+    const product = await productDao.deleteOne(pid);
    
     if (!product) return res.status(404).json({ status: "error", msg: "Producto no encontrado" });
     
