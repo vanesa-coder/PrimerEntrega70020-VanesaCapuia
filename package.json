@@ -13,7 +13,12 @@
   "description": "",
   "dependencies": {
     "express": "^4.19.2",
+<<<<<<< HEAD
     "mongoose": "^8.5.1",
+=======
+    "express-handlebars": "^7.1.3",
+    "socket.io": "^4.7.5",
+>>>>>>> 163ed6889f7d86aa32193ba4e158ecf35fdc2f32
     "uuid": "^10.0.0"
   },
   "devDependencies": {
